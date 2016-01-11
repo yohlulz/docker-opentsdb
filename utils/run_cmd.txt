@@ -1,0 +1,1 @@
+docker run --name=prod_tsdb_rw -h tsdb_rw -d -p 4242:4242 -v /opt/work/docker/tora/docker-20160108/opentsdb/data/cache/:/opt/data/cache -v /opt/work/docker/tora/docker-20160108/opentsdb/data/tsdb:/opt/data/tsdb --link prod_hbase:hbase tora/tsdb
