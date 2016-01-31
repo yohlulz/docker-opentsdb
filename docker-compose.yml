@@ -1,0 +1,35 @@
+tsdb_rw:
+ image: utcn/tsdb
+ container_name: prod_tsdb_rw
+ hostname: tsdb_rw
+ ports:
+ - "4242:4242"
+ volumes:
+ - ./data/rw/cache:/opt/data/cache
+ - ./data/rw/tsdb:/opt/data/tsdb
+ external_links:
+ - prod_hbase:hbase
+
+tsdb_ro_1:
+ image: utcn/tsdb
+ container_name: prod_tsdb_ro_1
+ hostname: tsdb_ro_1
+ ports:
+ - "4343:4242"
+ volumes:
+ - ./data/ro-1/cache:/opt/data/cache
+ - ./data/ro-1/tsdb:/opt/data/tsdb
+ external_links:
+ - prod_hbase:hbase
+
+tsdb_ro_2:
+ image: utcn/tsdb
+ container_name: prod_tsdb_ro_2
+ hostname: tsdb_ro_2
+ ports:
+ - "4545:4242"
+ volumes:
+ - ./data/ro-2/cache:/opt/data/cache
+ - ./data/ro-2/tsdb:/opt/data/tsdb
+ external_links:
+ - prod_hbase:hbase
