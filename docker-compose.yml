@@ -7,6 +7,7 @@ tsdb_rw:
  volumes:
  - ./data/rw/cache:/opt/data/cache
  - ./data/rw/tsdb:/opt/data/tsdb
+ - ./data/rw/ssh/keys:/etc/ssh/keys
  external_links:
  - prod_hbase:hbase
 
@@ -19,6 +20,7 @@ tsdb_ro_1:
  volumes:
  - ./data/ro-1/cache:/opt/data/cache
  - ./data/ro-1/tsdb:/opt/data/tsdb
+ - ./data/ro-1/ssh/keys:/etc/ssh/keys
  external_links:
  - prod_hbase:hbase
 
@@ -31,5 +33,6 @@ tsdb_ro_2:
  volumes:
  - ./data/ro-2/cache:/opt/data/cache
  - ./data/ro-2/tsdb:/opt/data/tsdb
+ - ./data/ro-2/ssh/keys:/etc/ssh/keys
  external_links:
  - prod_hbase:hbase

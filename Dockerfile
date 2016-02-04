@@ -22,8 +22,8 @@ RUN \
 			automake \
 			supervisor \
 			jq \
-			ant
-			
+			ant \
+			openssh-server
 
 # install java
 RUN \
@@ -38,6 +38,13 @@ ENV JAVA_HOME /usr/lib/jvm/java-7-oracle
 
 # For nano to work properly
 ENV TERM=xterm
+RUN sed -i 's|#AuthorizedKeysFile.*authorized_keys|AuthorizedKeysFile /etc/ssh/keys/authorized_keys|g' /etc/ssh/sshd_config
+RUN mkdir -p /etc/ssh/keys && touch /etc/ssh/keys/authorized_keys
+RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+# SSH login fix. Otherwise user is kicked off after login
+RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+RUN mkdir -p /var/run/sshd
 ############################################
 
 ############################## TSD specific
@@ -62,13 +69,19 @@ ADD etc/supervisord.conf /etc/supervisord.conf
 ADD etc/supervisord.d/* /etc/supervisord.d/
 ###########################################
 
+############################# Cleanup
+RUN apt-get clean autoremove autoclean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+###########################################
+
 ########################## Expose ports
 # TSD
 EXPOSE 4242
+# SSH
+EXPOSE 22
 ###########################################
 
 
-VOLUME ["/opt/data/tsdb", "/opt/data/cache"]
+VOLUME ["/opt/data/tsdb", "/opt/data/cache", "/etc/ssh/keys"]
 
 #Start supervisor
 CMD ["/opt/opentsdb/bin/startup.sh"]
