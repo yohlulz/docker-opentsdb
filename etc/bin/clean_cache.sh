@@ -14,8 +14,14 @@ CACHE_DIR=`curl -sS "http://${TSD_HOST}:${TSD_PORT}/api/config" | jq -c  "[{\"ts
 # Remove files older than 12h every 10m
 echo "[$(date)] Cleaning cache ..."
 while true; do
-    	find ${CACHE_DIR} -mindepth 1 -mmin "+${CACHE_MAX_AGE_MINUTES}" -delete;
-	echo "[$(date)] "`du -lh ${CACHE_DIR}`
-	sleep "${CACHE_CLEAN_INTERVAL}"
+	if [ ! -d "${CACHE_DIR}" ];then
+		exit 1
+	fi
+	case "$CACHE_DIR" in
+	*cache*)
+		find ${CACHE_DIR} -mindepth 1 -mmin "+${CACHE_MAX_AGE_MINUTES}" -delete;
+		echo "[$(date)] "`du -lh ${CACHE_DIR}`
+		sleep "${CACHE_CLEAN_INTERVAL}"
+	esac
 done
 
