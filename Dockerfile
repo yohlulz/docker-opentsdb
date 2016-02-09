@@ -81,7 +81,7 @@ EXPOSE 22
 ###########################################
 
 
-VOLUME ["/opt/data/tsdb", "/opt/data/cache", "/etc/ssh/keys"]
+VOLUME ["/opt/data/tsdb", "/opt/data/cache", "/etc/ssh/keys", "/opt/data/varnish"]
 
 #Start supervisor
 CMD ["/opt/opentsdb/bin/startup.sh"]
